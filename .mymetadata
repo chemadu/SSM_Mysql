@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-module
   type="WEB"
-  name="EasyUIOnly"
-  id="myeclipse.1487122656294"
-  context-root="/EasyUIOnly"
+  name="TeamSchoolManage"
+  id="myeclipse.1524273592070"
+  context-root="/TeamSchoolManage"
   j2ee-spec="6.0"
-  archive="EasyUIOnly.war">
+  archive="TeamSchoolManage.war">
   <attributes>
     <attribute name="webrootdir" value="WebRoot" />
   </attributes>
