@@ -3,7 +3,7 @@
     <wb-module deploy-name="CRM">
         <wb-resource deploy-path="/" source-path="/WebRoot"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
-        <property name="context-root" value="/CRM"/>
         <property name="java-output-path" value="/CRM/WebRoot/WEB-INF/classes"/>
+        <property name="context-root" value="/SSM_Mysql"/>
     </wb-module>
 </project-modules>

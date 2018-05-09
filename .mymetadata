@@ -3,7 +3,7 @@
   type="WEB"
   name="CRM"
   id="myeclipse.1524273592070"
-  context-root="/CRM"
+  context-root="/SSM_Mysql"
   j2ee-spec="6.0"
   archive="TeamSchoolManage.war">
   <attributes>
