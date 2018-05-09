@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ysdit.NetWord.Mapper.StudentMapper">
+
+<select id="AllStudent" parameterType="int"  resultType="com.ysdit.NetWork.entity.Student">
+	select * from students
+
+ 	LIMIT   #{0},#{1}
+ 
+</select>
+
+<!-- 全部学生 -->
+<select id="AllStudentList"   resultType="com.ysdit.NetWork.entity.Student">
+	select * from students
+</select>
+
+</mapper>

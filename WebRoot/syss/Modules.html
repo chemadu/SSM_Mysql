@@ -1,0 +1,201 @@
+<meta charset="UTF-8">
+<script type="text/javascript">
+	var token = "dd8d58ca-d679-434c-85ef-1ea96fdd40c4";
+	$(function() {
+		$("#treemenu").tree({
+			lines: true,
+			url: 'http://192.168.1.250:83/api/GetAllModule',
+			queryParams: { //要发送的参数列表
+				token: token
+			}
+		});
+	});
+
+	//点击新增按钮
+	function addModuleInfo() {
+		var nodes = $('#treemenu').tree('getSelected'); // get checked nodes
+		// alert(nodes.text);//获取
+		//alert(nodes.id);//获取节点id
+		if(nodes != null) {
+			//将当前行数据填入表单
+			$("#parentModulename").text(nodes.text);
+			$("#addModule_window").window("open");
+		} else {
+			alert("请选择父节点！");
+		}
+	}
+
+	//点击新增保存按钮
+	function submitModuleForm() {
+		var nodes = $('#treemenu').tree('getSelected');
+		var flag = $("#addModuleForm").form("validate");
+		var moduleName = $("#Modulename").val();
+		var weight = $("#Moduleweight").val();
+		var path = $("#ModuleUrl").val();
+		if(flag) {
+			$.post("http://192.168.1.250:83/api/CreateModule", {
+					name: moduleName,
+					parentId: nodes.id,
+					path: path,
+					weight: weight,
+					token: token
+				},
+				function(res) {
+					//alert(res.message);
+					if(res.success) {
+						alert("新增成功");
+						$("#addModule_window").window("close");
+						$("#treemenu").tree("reload");
+					}
+				}, "json");
+		}
+	}
+
+	//点击新增取消按钮
+	function clearModuleForm() {
+		$('#addModuleForm').form('clear');
+		$("#addModule_window").window("close");
+	}
+
+	//修改
+	//修改
+	function UpdateModule() {
+
+		//将当前行数据填入表单
+		var id = $('#treemenu').tree('getSelected');
+		var parentId = $("#treemenu").tree("getParent", id.target);
+		$.post("http://192.168.1.250:83/api/GetModuleById", {
+			id: id.id,
+			token: token
+		}, function(res) {
+			$("#updateModuleForm").form("load", JSON.parse(res.message));
+			$("#updateModule_window").window("open");
+		}, "json");
+	}
+
+	//点击修改表单保存按钮
+	function updateModuleForm() {
+		var nodes = $('#treemenu').tree('getSelected');
+		var flag = $("#updateModuleForm").form("validate");
+		var parentId = $("#parentId").val();
+		var Name = $("#name").val();
+		var weight = $("#weight").val();
+		var path = $("#url").val();
+		$.post(
+			"http://192.168.1.250:83/api/UpdateModule", {
+				mId: nodes.id,
+				name: Name,
+				parentId: parentId,
+				path: path,
+				weight: weight,
+				token: token
+			},
+			function(res) {
+				//alert(res.success);
+				if(res.success) {
+					alert("修改成功"); //此处建议修改为$.messager.alert()方法，请查阅帮助文档，自行修改。
+					$("#updateModule_window").window("close");
+					$("#treemenu").tree("reload");
+				}
+			}, "json");
+	}
+
+	function clearModuleForm_1() {
+		$('#updateModuleForm').form('clear');
+		$("#updateModule_window").window("close");
+	}
+
+	//点击删除
+	function deleteInfo(index) {
+		var nodes = $('#treemenu').tree('getSelected'); 
+		if(nodes == null){
+			alert("请选择要删除的模块");
+		}else{
+			$.post("http://192.168.1.250:83/api/DeleteModule", {
+				mId: nodes.id,
+				token: token
+		}, function(deleteInfo) {
+			var deleteInfo = eval("(" + deleteInfo + ")"); //你知道这里可以如何修改从而变得更简单么？                
+			if(deleteInfo.success) {
+				alert("删除成功");
+				$("#treemenu").tree("reload");
+			}
+		});
+
+			
+		}
+		
+			}
+</script>
+<table name="center" class="easyui-tree" id="treemenu" title="用户列表" style="width:300;height:400" data-options="rownumbers:true,singleSelect:true,pagination:true,method:'post',toolbar:'#usertb',pageSize:10">
+	<div style="margin-bottom:5px">
+		<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="addModuleInfo()">添加</a>
+		<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="UpdateModule()">修改</a>
+		<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cut" plain="true" onclick="deleteInfo()">删除</a>
+	</div>
+</table>
+
+<div id="addModule_window" class="easyui-window" title="添加员工信息" data-options="modal:true,closed:true,iconCls:'icon-save'" style="width:500px;height:300px;padding:10px;">
+	<form id="addModuleForm">
+		<table cellpadding="5">
+			<tr>
+				<td>父节点名称:</td>
+				<td>
+					<div id="parentModulename"></div>
+				</td>
+			</tr>
+			<tr>
+				<td>模块名称:</td>
+				<td><input class="easyui-textbox" type="text" id="Modulename" name="Modulename" data-options="required:true"></input>
+				</td>
+			</tr>
+			<tr>
+				<td>模块对应路径:</td>
+				<td><input class="easyui-textbox" type="text" id="ModuleUrl" name="ModuleUrl" data-options="required:true"></input>
+				</td>
+			</tr>
+			<tr>
+				<td>权重:</td>
+				<td><input class="easyui-textbox" type="text" name="Moduleweight" id="Moduleweight" data-options="required:true"></input>
+				</td>
+			</tr>
+
+		</table>
+	</form>
+	<div style="text-align:center;padding:5px">
+		<a href="javascript:void(0)" class="easyui-linkbutton" type="button" onclick="submitModuleForm()">保存</a>
+		<a href="javascript:void(0)" class="easyui-linkbutton" onclick="clearModuleForm()">取消</a>
+	</div>
+</div>
+
+<div id="updateModule_window" class="easyui-window" title="修改员工信息" data-options="modal:true,closed:true,iconCls:'icon-save'" style="width:500px;height:300px;padding:10px;">
+	<form id="updateModuleForm">
+		<table cellpadding="5">
+			<tr hidden="hidden">
+				<td>父节点id:</td>
+				<td><input class="easyui-textbox" type="text" name="parentId" id="parentId" data-options="required:true"></input>
+				</td>
+			</tr>
+			<tr>
+				<td>模块名称:</td>
+				<td><input class="easyui-textbox" type="text" id="name" name="name" data-options="field:'text'"></input>
+				</td>
+			</tr>
+			<tr>
+				<td>模块对应路径:</td>
+				<td><input class="easyui-textbox" type="text" id="weight" name="weight" data-options=""></input>
+				</td>
+			</tr>
+			<tr>
+				<td>权重:</td>
+				<td><input class="easyui-textbox" type="text" name="url" id="url" data-options=""></input>
+				</td>
+			</tr>
+
+		</table>
+	</form>
+	<div style="text-align:center;padding:5px">
+		<a href="javascript:void(0)" class="easyui-linkbutton" type="button" onclick="updateModuleForm()">保存</a>
+		<a href="javascript:void(0)" class="easyui-linkbutton" onclick="clearModuleForm_1()">取消</a>
+	</div>
+</div>
