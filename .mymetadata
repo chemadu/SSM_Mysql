@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-module
   type="WEB"
-  name="TeamSchoolManage"
+  name="CRM"
   id="myeclipse.1524273592070"
-  context-root="/TeamSchoolManage"
+  context-root="/CRM"
   j2ee-spec="6.0"
   archive="TeamSchoolManage.war">
   <attributes>
